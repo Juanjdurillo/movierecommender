@@ -21,6 +21,11 @@
         <activity
             android:name=".ShowMovieDetails"
             android:label="@string/title_activity_show_movie_details"
+            android:parentActivityName=".MovieRecommenderEntryPoint" >
+        </activity>
+        <activity
+            android:name=".SortPreferencesSetting"
+            android:label="@string/title_activity_sort_preferences_setting"
             android:parentActivityName=".MovieRecommenderEntryPoint">
         </activity>
     </application>

@@ -3,6 +3,7 @@ package com.example.android.movierecomender;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,16 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
     //ArrayAdapter using to inflate the layout
     private MoviePosterAdapter movieAdapter = null;
 
+    private void fetchMovies() {
+        String sorting_key =
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),
+                                                                               getString(R.string.default_sorting_method));
+        FetchPopularMovies movieObtainer = new FetchPopularMovies();
+        movieObtainer.execute(sorting_key);
+    }
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,27 +68,30 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
                 Intent intent = (new Intent(getActivity(),
                         ShowMovieDetails.class));
                 Bundle b = new Bundle();
-                b.putSerializable(MovieInfoContainer.class.getName(),movie);
+                b.putSerializable(MovieInfoContainer.class.getName(), movie);
                 intent.putExtras(b);
                 startActivity(intent);
             }
         });
 
-        FetchPopularMovies movieObtainer = new FetchPopularMovies();
-        movieObtainer.execute();
         return rootView;
     }
 
-    public class FetchPopularMovies  extends AsyncTask<Void, Void, List<MovieInfoContainer>> {
+    @Override
+    public void onStart() {
+        super.onStart();
+        fetchMovies();
+    }
+
+    public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoContainer>> {
 
 
         // Stores my key for movieDB database
         // To do: move SRINGS into the String file
-        public static final String MOVIE_DB_KEY                 = "";
+        public static final String MOVIE_DB_KEY                 = "d4f990c13b86967328554d1b956f3b85";
         public static final String MOVIE_DB_URL                 =
                 "http://api.themoviedb.org/3/discover/movie?";
         public static final String SORT_PARAMETER_LABEL         = "sort_by";
-        public static final String SORT_PARAMETER_DEFAULT_VALUE = "popularity.desc";
         public static final String KEY_PARAMETER_LABEL          = "api_key";
 
         public static final String CONNECTION_ERROR              = "IO ERROR, INTERNET CONNECTION";
@@ -92,13 +106,14 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
         @Override
         /**
          * Connects to the MovieDB database and obtains the list of most popular movies
-         * <code>params</code>
+         * <code>params</code> It contains only one parameter, which is the value the user wants
+         * the movies sorted by
          */
-        protected List<MovieInfoContainer> doInBackground(Void... params) {
+        protected List<MovieInfoContainer> doInBackground(String... params) {
 
 
             Uri uri_builder = Uri.parse(MOVIE_DB_URL).buildUpon()
-                    .appendQueryParameter(SORT_PARAMETER_LABEL, SORT_PARAMETER_DEFAULT_VALUE)
+                    .appendQueryParameter(SORT_PARAMETER_LABEL, params[0])
                     .appendQueryParameter(KEY_PARAMETER_LABEL,MOVIE_DB_KEY).build();
             Log.d(CONNECTION_TAG,uri_builder.toString());
 
@@ -164,8 +179,8 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
                 try {
                     for (int i = 0; i < array_of_json_movies.length(); i++) {
                         JSONObject  json_movie          = array_of_json_movies.getJSONObject(i)             ;
-                        boolean     is_adult_movie      = json_movie.getBoolean(ADULT_CLASSIFICATION_LABEL) ;
-                        String      movie_title         = json_movie.getString(TITLE_LABEL)                 ;
+                        boolean     is_adult_movie = json_movie.getBoolean(ADULT_CLASSIFICATION_LABEL) ;
+                        String      movie_title = json_movie.getString(TITLE_LABEL)                 ;
                         String      movie_language      = json_movie.getString(LANGUAGE_LABEL)              ;
                         String      movie_plot          = json_movie.getString(PLOT_LABEL)                  ;
                         String      movie_release       = json_movie.getString(RELEASE_DATE_LABEL)          ;
