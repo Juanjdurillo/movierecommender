@@ -2,7 +2,6 @@ package com.example.android.movierecomender;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -37,18 +34,19 @@ public class MovieInfoArrayAdapter extends ArrayAdapter<MovieInfoContainer> {
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null)
-            convertView = mInflater.inflate(R.layout.movie_item_layaout, null);
+            convertView = mInflater.inflate(R.layout.fragment_show_movie_details, null);
 
         ((TextView) convertView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
         ((TextView) convertView.findViewById(R.id.movie_language)).setText(movie.getOriginalLanguage());
 
+        /*
         if (movie.isOnlyForAdults())
             ((TextView) convertView.findViewById(R.id.movie_adult)).setText("+18");
-
+*/
         ((TextView) convertView.findViewById(R.id.movie_plot)).setText(movie.getMoviePlot());
         Picasso.with(this.context).load(movie.getPosterPath()).into(
-        (ImageView) convertView.findViewById(R.id.movie_poster));
-        ((ImageView) convertView.findViewById(R.id.movie_poster)).setVisibility(ImageView.VISIBLE);
+        (ImageView) convertView.findViewById(R.id.movie_thumnail));
+        ((ImageView) convertView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);
 
         return convertView;
     }

@@ -12,7 +12,6 @@ public class MovieRecommenderEntryPoint extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("JJ", "The main object is created");
         setContentView(R.layout.activity_movie_recomender_entry_point);
     }
 

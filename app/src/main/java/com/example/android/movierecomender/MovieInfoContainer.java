@@ -1,15 +1,20 @@
 package com.example.android.movierecomender;
 
+import java.io.Serializable;
+
 /**
  * This class serves as a container for the information related to a particular movie
  */
-public class MovieInfoContainer {
+public class MovieInfoContainer implements Serializable{
     private final boolean   only_adults;
     private final String    original_title;
     private final String    original_language;
     private final String    movie_plot;
     private final String    release_date;
     private final String    poster_path;
+
+
+    private final String    average_votes;
     private final String    poster_path_base = "http://image.tmdb.org/t/p/w185";
 
     /**
@@ -21,13 +26,14 @@ public class MovieInfoContainer {
      * @param release_date
      * @param poster_path
      */
-    public MovieInfoContainer(boolean only_adults, String original_title, String original_language, String movie_plot, String release_date, String poster_path) {
-        this.only_adults = only_adults;
-        this.original_title = original_title;
-        this.original_language = original_language;
-        this.movie_plot = movie_plot;
-        this.release_date = release_date;
-        this.poster_path = this.poster_path_base+poster_path;
+    public MovieInfoContainer(boolean only_adults, String original_title, String original_language, String movie_plot, String release_date, String poster_path, String average_votes) {
+        this.only_adults        = only_adults;
+        this.original_title     = original_title;
+        this.original_language  = original_language;
+        this.movie_plot         = movie_plot;
+        this.release_date       = release_date;
+        this.poster_path        = this.poster_path_base+poster_path;
+        this.average_votes      = average_votes;
     }
 
     /**
@@ -90,5 +96,14 @@ public class MovieInfoContainer {
         result += isOnlyForAdults() ? "Warning: +18." : "";
         return result;
     }
+
+    /**
+     * Obtains the average votes for this movie
+     * @return A <code>String</code> with the average votes
+     */
+    public String getAverage_votes() {
+        return average_votes;
+    }
+
 
 }

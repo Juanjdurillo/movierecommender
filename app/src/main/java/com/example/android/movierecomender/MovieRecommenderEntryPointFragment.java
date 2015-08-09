@@ -1,5 +1,6 @@
 package com.example.android.movierecomender;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -29,7 +34,7 @@ import java.util.List;
 public class MovieRecommenderEntryPointFragment extends Fragment {
 
     //ArrayAdapter using to inflate the layout
-    private MovieInfoArrayAdapter movieAdapter = null;
+    private MoviePosterAdapter movieAdapter = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,14 +42,26 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_movie_recomender_entry_point, container, false);
 
-        this.movieAdapter = new MovieInfoArrayAdapter(
+        this.movieAdapter = new MoviePosterAdapter(
                 getActivity(),
-                R.layout.movie_item_layaout,
+                R.layout.fragment_movie_recomender_entry_point,
                 new ArrayList<MovieInfoContainer>()
         );
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_movies);
+        GridView listView = (GridView) rootView.findViewById(R.id.grid_movies);
         listView.setAdapter(this.movieAdapter);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MovieInfoContainer movie = movieAdapter.getItem(position);
+                Intent intent = (new Intent(getActivity(),
+                        ShowMovieDetails.class));
+                Bundle b = new Bundle();
+                b.putSerializable(MovieInfoContainer.class.getName(),movie);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
 
         FetchPopularMovies movieObtainer = new FetchPopularMovies();
         movieObtainer.execute();
@@ -139,6 +156,7 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
             final String PLOT_LABEL                 = "overview";
             final String RELEASE_DATE_LABEL         = "release_date";
             final String POSTER_PATH_LABEL          = "poster_path";
+            final String AVERAGE_VOTES_LABEL        = "vote_average";
 
             try {
                 JSONArray array_of_json_movies = (new JSONObject(jSonStr)).getJSONArray(ARRAY_OF_MOVIES_LABEL);
@@ -152,8 +170,9 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
                         String      movie_plot          = json_movie.getString(PLOT_LABEL)                  ;
                         String      movie_release       = json_movie.getString(RELEASE_DATE_LABEL)          ;
                         String      movie_poster_path   = json_movie.getString(POSTER_PATH_LABEL)           ;
+                        String      movie_average_votes = json_movie.getString(AVERAGE_VOTES_LABEL)         ;
                         MovieInfoContainer movie;
-                        movie = new MovieInfoContainer(is_adult_movie,movie_title,movie_language,movie_plot,movie_release,movie_poster_path);
+                        movie = new MovieInfoContainer(is_adult_movie,movie_title,movie_language,movie_plot,movie_release,movie_poster_path,movie_average_votes);
                         Log.d(CONNECTION_TAG,movie.toString());
                         list_of_movies.add(movie);
                     }
