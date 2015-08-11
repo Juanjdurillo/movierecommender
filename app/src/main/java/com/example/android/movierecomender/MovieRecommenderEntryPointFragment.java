@@ -83,12 +83,18 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
         fetchMovies();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchMovies();
+    }
+
     public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoContainer>> {
 
 
         // Stores my key for movieDB database
         // To do: move SRINGS into the String file
-        public static final String MOVIE_DB_KEY                 = "d4f990c13b86967328554d1b956f3b85";
+        public static final String MOVIE_DB_KEY                 = "";
         public static final String MOVIE_DB_URL                 =
                 "http://api.themoviedb.org/3/discover/movie?";
         public static final String SORT_PARAMETER_LABEL         = "sort_by";
