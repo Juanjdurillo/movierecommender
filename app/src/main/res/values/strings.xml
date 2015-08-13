@@ -6,4 +6,5 @@
     <string name="preferred_sorting_method">Sorting preferences</string>
     <string name="default_sorting_method">popularity.desc</string>
     <string name="preferred_sorting_method_key">sorting_key</string>
+    <string name="refresh">Refresh Movies</string>
 </resources>

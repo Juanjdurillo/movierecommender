@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +40,30 @@ public class MovieRecommenderEntryPointFragment extends Fragment {
     //ArrayAdapter using to inflate the layout
     private MoviePosterAdapter movieAdapter = null;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // this fragment should also show menu events
+        setHasOptionsMenu(true);
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            fetchMovies();
+            return true;
+        }
+        return onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie_recommender_fragment, menu);
+    }
+
     private void fetchMovies() {
+        this.movieAdapter.clear();// remove from the adapter the movies fetched last time
         String sorting_key =
         PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),
                                                                                getString(R.string.default_sorting_method));
