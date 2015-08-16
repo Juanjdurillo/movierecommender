@@ -57,13 +57,13 @@ public class ShowMovieDetails extends ActionBarActivity {
                 Bundle b = intent.getExtras();
                 MovieInfoContainer movie = (MovieInfoContainer) b.getSerializable(MovieInfoContainer.class.getName());
                 Log.d("JJ", movie.toString());
-                Log.d("JJ",rootView.toString());
+                Log.d("JJ", rootView.toString());
                 ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
-                ((TextView) rootView.findViewById(R.id.movie_language)).setText(movie.getOriginalLanguage());
-                ((TextView) rootView.findViewById(R.id.release_date)).setText(movie.getReleaseDate());
-                ((TextView) rootView.findViewById(R.id.average_votes)).setText(movie.getAverage_votes());
+                ((TextView) rootView.findViewById(R.id.movie_language)).setText("language:"+"\t"+movie.getOriginalLanguage());
+                ((TextView) rootView.findViewById(R.id.release_date)).setText("Release date:"+"\t"+movie.getReleaseDate());
+                ((TextView) rootView.findViewById(R.id.average_votes)).setText("Votes:"+"\t"+movie.getAverage_votes());
 
-                ((TextView) rootView.findViewById(R.id.movie_plot)).setText(movie.getMoviePlot());
+                ((TextView) rootView.findViewById(R.id.movie_plot)).setText("Summary:"+"\t"+movie.getMoviePlot());
                 Picasso.with(rootView.getContext()).load(movie.getPosterPath()).into(
                         (ImageView) rootView.findViewById(R.id.movie_thumnail));
                 ((ImageView) rootView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);

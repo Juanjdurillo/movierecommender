@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MovieRecommenderEntryPoint"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +21,12 @@
         <activity
             android:name=".ShowMovieDetails"
             android:label="@string/title_activity_show_movie_details"
-            android:parentActivityName=".MovieRecommenderEntryPoint" >
+            android:parentActivityName=".MainActivity" >
         </activity>
         <activity
             android:name=".SortPreferencesSetting"
             android:label="@string/title_activity_sort_preferences_setting"
-            android:parentActivityName=".MovieRecommenderEntryPoint">
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

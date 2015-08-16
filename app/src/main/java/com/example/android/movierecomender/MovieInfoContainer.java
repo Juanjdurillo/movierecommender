@@ -3,7 +3,10 @@ package com.example.android.movierecomender;
 import java.io.Serializable;
 
 /**
- * This class serves as a container for the information related to a particular movie
+ * This class serves as a container for the information related to a particular movie. Basically, it
+ * only holds/record information. It does not provide any behaviour besides accessing to the movie
+ * fields.
+ * Implements <code>Serializable</code> so it can be passed between intents using a bundle object
  */
 public class MovieInfoContainer implements Serializable{
     private final boolean   only_adults;

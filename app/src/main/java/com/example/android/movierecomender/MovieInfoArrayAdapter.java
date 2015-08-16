@@ -36,14 +36,14 @@ public class MovieInfoArrayAdapter extends ArrayAdapter<MovieInfoContainer> {
         if (convertView == null)
             convertView = mInflater.inflate(R.layout.fragment_show_movie_details, null);
 
-        ((TextView) convertView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
-        ((TextView) convertView.findViewById(R.id.movie_language)).setText(movie.getOriginalLanguage());
+        ((TextView) convertView.findViewById(R.id.movie_title)).setText("Original title: "+movie.getOriginalTitle());
+        ((TextView) convertView.findViewById(R.id.movie_language)).setText("language"+movie.getOriginalLanguage());
 
         /*
         if (movie.isOnlyForAdults())
             ((TextView) convertView.findViewById(R.id.movie_adult)).setText("+18");
 */
-        ((TextView) convertView.findViewById(R.id.movie_plot)).setText(movie.getMoviePlot());
+        ((TextView) convertView.findViewById(R.id.movie_plot)).setText("Summary: "+movie.getMoviePlot());
         Picasso.with(this.context).load(movie.getPosterPath()).into(
         (ImageView) convertView.findViewById(R.id.movie_thumnail));
         ((ImageView) convertView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);
