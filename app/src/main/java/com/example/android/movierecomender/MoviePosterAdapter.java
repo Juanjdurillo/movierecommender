@@ -31,10 +31,8 @@ public class MoviePosterAdapter extends ArrayAdapter<MovieInfoContainer> {
         MovieInfoContainer movie = getItem(position);
         ImageView imageView;
 
-
-
         if (convertView==null) {
-            imageView = new ImageView(context);
+            imageView = new ImageView(this.context);
             imageView.setLayoutParams(new GridView.LayoutParams(parent.getWidth()/2,  (int) ((parent.getWidth()/2) * 1.5)));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
@@ -44,13 +42,6 @@ public class MoviePosterAdapter extends ArrayAdapter<MovieInfoContainer> {
 
         Picasso.with(this.context).load(movie.getPosterPath()).fit().into(imageView);
         imageView.setVisibility(ImageView.VISIBLE);
-
-
-
         return imageView;
-
-
-
-
     }
 }

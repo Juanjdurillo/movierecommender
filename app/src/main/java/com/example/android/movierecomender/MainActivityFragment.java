@@ -1,12 +1,10 @@
 package com.example.android.movierecomender;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,20 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -37,21 +22,21 @@ import java.util.List;
  */
 public class MainActivityFragment extends Fragment {
 
-    //ArrayAdapter using to inflate the layout
+    // ArrayAdapter feeding the GridView in the main Activity
     private MoviePosterAdapter movieAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // this fragment should also show menu events
+        // this fragment should also show menu events (the refresh menu)
         setHasOptionsMenu(true);
     }
 
-
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            fetchMovies();
+            fetchMovies(); // if the button has been clicked retrieve movies
             return true;
         }
         return onOptionsItemSelected(item);
@@ -61,15 +46,6 @@ public class MainActivityFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_movie_recommender_fragment, menu);
     }
-
-    private void fetchMovies() {
-        this.movieAdapter.clear();// remove from the adapter the movies fetched last time
-        String sorting_key =
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
-        new FetchPopularMovies(this.movieAdapter).execute(sorting_key);
-    }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,15 +81,19 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        fetchMovies();
+        fetchMovies(); // retrieve movies everytime the view of this fragment is started
     }
 
-    /*
-    @Override
-    public void onResume() {
-        super.onResume();
-        fetchMovies();
+    /**
+     * This method will create a <code>FetchPopularMovies</code> object to retrieve movies from
+     * the database. The <code>FetchPopularMovies</code> extends <code>AsyncTask</code>
+     */
+    private void fetchMovies() {
+        String sorting_key =
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
+        String key = getResources().getString(R.string.movie_db_key);
+        String [] params = {sorting_key, key};
+        new FetchPopularMovies(this.movieAdapter).execute(params);
     }
-    */
 
 }

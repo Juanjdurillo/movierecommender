@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,14 +55,12 @@ public class ShowMovieDetails extends ActionBarActivity {
             if (intent!=null) {
                 Bundle b = intent.getExtras();
                 MovieInfoContainer movie = (MovieInfoContainer) b.getSerializable(MovieInfoContainer.class.getName());
-                Log.d("JJ", movie.toString());
-                Log.d("JJ", rootView.toString());
                 ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
-                ((TextView) rootView.findViewById(R.id.movie_language)).setText("language:"+"\t"+movie.getOriginalLanguage());
-                ((TextView) rootView.findViewById(R.id.release_date)).setText("Release date:"+"\t"+movie.getReleaseDate());
-                ((TextView) rootView.findViewById(R.id.average_votes)).setText("Votes:"+"\t"+movie.getAverage_votes());
+                ((TextView) rootView.findViewById(R.id.movie_language)).setText(getResources().getString(R.string.movie_language_label)+"\t"+movie.getOriginalLanguage());
+                ((TextView) rootView.findViewById(R.id.release_date)).setText(getResources().getString(R.string.release_date_label)+"\t"+movie.getReleaseDate());
+                ((TextView) rootView.findViewById(R.id.average_votes)).setText(getResources().getString(R.string.average_votes_label)+"\t"+movie.getAverage_votes());
 
-                ((TextView) rootView.findViewById(R.id.movie_plot)).setText("Summary:"+"\t"+movie.getMoviePlot());
+                ((TextView) rootView.findViewById(R.id.movie_plot)).setText(getResources().getString(R.string.movie_plot_label)+"\t"+movie.getMoviePlot());
                 Picasso.with(rootView.getContext()).load(movie.getPosterPath()).into(
                         (ImageView) rootView.findViewById(R.id.movie_thumnail));
                 ((ImageView) rootView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);

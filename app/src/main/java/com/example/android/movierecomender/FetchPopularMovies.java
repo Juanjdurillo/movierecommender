@@ -18,15 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class implements an assyncrhonous task to retrieve a list of movies from the MovieDB.
+ * This class implements an asynchronous task to retrieve a list of movies from the MovieDB.
  */
 public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoContainer>> {
 
     private ArrayAdapter movieAdapter;
 
-    // Stores my key for movieDB database
-    // To do: move SRINGS into the String file
-    public static final String MOVIE_DB_KEY                 = "d4f990c13b86967328554d1b956f3b85";
+
     public static final String MOVIE_DB_URL                 =
             "http://api.themoviedb.org/3/discover/movie?";
     public static final String SORT_PARAMETER_LABEL         = "sort_by";
@@ -38,7 +36,7 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoC
     public static final String JSON_MOVIE_EXCEPTION          = "Error detected. Some movies or movies' information may not been showed";
 
     // Tags for debugging
-    public static final String CONNECTION_TAG                = "JJ";
+    public static final String CONNECTION_TAG                = "CONNECTION";
 
 
     public FetchPopularMovies(ArrayAdapter adapter) {
@@ -49,15 +47,15 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoC
     @Override
     /**
      * Connects to the MovieDB database and obtains the list of most popular movies
-     * <code>params</code> It contains only one parameter, which is the value the user wants
-     * the movies sorted by
+     * @param <code>params</code> is an array of length
+     * <code>params[0]</code> indicates the sorting preference
+     * <code>params[1]</code> indicates the movie_db user key
      */
     protected List<MovieInfoContainer> doInBackground(String... params) {
 
-
         Uri uri_builder = Uri.parse(MOVIE_DB_URL).buildUpon()
                 .appendQueryParameter(SORT_PARAMETER_LABEL, params[0])
-                .appendQueryParameter(KEY_PARAMETER_LABEL,MOVIE_DB_KEY).build();
+                .appendQueryParameter(KEY_PARAMETER_LABEL,params[1]).build();
         Log.d(CONNECTION_TAG, uri_builder.toString());
 
         HttpURLConnection movieDBConnection = null;

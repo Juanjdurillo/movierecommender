@@ -34,7 +34,7 @@ public class SortPreferencesSetting extends PreferenceActivity
         onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+                        .getString(preference.getKey(), getResources().getString(R.string.default_sorting_method)));
     }
 
 
