@@ -1,0 +1,1 @@
+MovieDB key should be specified in the string.xml file
