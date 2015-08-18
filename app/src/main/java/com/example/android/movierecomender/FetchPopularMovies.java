@@ -23,6 +23,7 @@ import java.util.List;
 public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoContainer>> {
 
     private ArrayAdapter movieAdapter;
+    private List<MovieInfoContainer> cache;
 
 
     public static final String MOVIE_DB_URL                 =
@@ -39,8 +40,9 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoC
     public static final String CONNECTION_TAG                = "CONNECTION";
 
 
-    public FetchPopularMovies(ArrayAdapter adapter) {
+    public FetchPopularMovies(ArrayAdapter adapter, List<MovieInfoContainer> cache) {
         this.movieAdapter = adapter;
+        this.cache  = cache;
     }
 
 
@@ -147,7 +149,9 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoC
     @Override
     protected void onPostExecute(List<MovieInfoContainer> result) {
         if (result!=null && result.size()>0) {
+            cache.clear();
             movieAdapter.clear(); // remove information from the last call
+            cache.addAll(result);
             movieAdapter.addAll(result);
         }
     }

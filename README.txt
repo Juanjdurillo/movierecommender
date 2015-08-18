@@ -1,1 +1,2 @@
 MovieDB key should be specified in the string.xml file
+I got stuck while designing the layouts and making them to fit what I wanted. My feeling there should be more information about creating xml layouts for Android in the lessos (maybe in further lessos)

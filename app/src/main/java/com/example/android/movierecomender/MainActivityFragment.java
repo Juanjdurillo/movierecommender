@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -24,6 +27,8 @@ public class MainActivityFragment extends Fragment {
 
     // ArrayAdapter feeding the GridView in the main Activity
     private MoviePosterAdapter movieAdapter = null;
+    private ArrayList<MovieInfoContainer> cache  =  new ArrayList<>(20);
+    ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,9 +48,19 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelableArrayList(MovieInfoContainer.class.getName(),this.cache);
+    }
+
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_movie_recommender_fragment, menu);
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,25 +69,32 @@ public class MainActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movie_recomender_entry_point, container, false);
 
         this.movieAdapter = new MoviePosterAdapter(
-                getActivity(),
-                R.layout.fragment_movie_recomender_entry_point,
-                new ArrayList<MovieInfoContainer>()
+                    getActivity(),
+                    R.layout.fragment_movie_recomender_entry_point,
+                    new ArrayList<MovieInfoContainer>()
         );
 
         GridView listView = (GridView) rootView.findViewById(R.id.grid_movies);
         listView.setAdapter(this.movieAdapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MovieInfoContainer movie = movieAdapter.getItem(position);
                 Intent intent = (new Intent(getActivity(),
-                        ShowMovieDetails.class));
-                Bundle b = new Bundle();
-                b.putSerializable(MovieInfoContainer.class.getName(), movie);
-                intent.putExtras(b);
-                startActivity(intent);
-            }
-        });
+                    ShowMovieDetails.class));
+                    Bundle b = new Bundle();
+                    b.putSerializable(MovieInfoContainer.class.getName(), movie);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                }
+            });
+        if (savedInstanceState != null && !savedInstanceState.isEmpty())
+            this.cache = savedInstanceState.getParcelableArrayList(MovieInfoContainer.class.getName());
+
+        if (this.cache.size() > 0)
+            this.movieAdapter.addAll(this.cache);
+        else
+            this.fetchMovies();
 
         return rootView;
     }
@@ -81,7 +103,6 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        fetchMovies(); // retrieve movies everytime the view of this fragment is started
     }
 
     /**
@@ -93,7 +114,7 @@ public class MainActivityFragment extends Fragment {
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
         String key = getResources().getString(R.string.movie_db_key);
         String [] params = {sorting_key, key};
-        new FetchPopularMovies(this.movieAdapter).execute(params);
+        new FetchPopularMovies(this.movieAdapter,this.cache).execute(params);
     }
 
 }

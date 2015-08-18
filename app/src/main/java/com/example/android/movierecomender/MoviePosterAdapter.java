@@ -11,12 +11,13 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Array adapter to feed a list_view with Movie info
  */
-public class MoviePosterAdapter extends ArrayAdapter<MovieInfoContainer> {
+public class MoviePosterAdapter extends ArrayAdapter<MovieInfoContainer> implements Serializable {
     Context context;
 
     public MoviePosterAdapter(Context context, int resource, ArrayList<MovieInfoContainer> objects) {

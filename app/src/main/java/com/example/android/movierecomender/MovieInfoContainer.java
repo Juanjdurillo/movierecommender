@@ -1,5 +1,8 @@
 package com.example.android.movierecomender;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +11,7 @@ import java.io.Serializable;
  * fields.
  * Implements <code>Serializable</code> so it can be passed between intents using a bundle object
  */
-public class MovieInfoContainer implements Serializable{
+public class MovieInfoContainer implements Serializable, Parcelable {
     private final boolean   only_adults;
     private final String    original_title;
     private final String    original_language;
@@ -109,4 +112,13 @@ public class MovieInfoContainer implements Serializable{
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this);
+    }
 }
