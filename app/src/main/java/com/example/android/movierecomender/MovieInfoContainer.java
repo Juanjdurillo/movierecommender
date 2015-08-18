@@ -43,6 +43,20 @@ public class MovieInfoContainer implements Serializable, Parcelable {
     }
 
     /**
+     * Creates MovieInfoContainer from a Parceable object
+     */
+    public MovieInfoContainer(Parcel parcel) {
+        MovieInfoContainer other = (MovieInfoContainer) parcel.readSerializable();
+        this.only_adults        = other.only_adults;
+        this.original_title     = other.original_title;
+        this.original_language  = other.original_language;
+        this.movie_plot         = other.movie_plot;
+        this.release_date       = other.release_date;
+        this.poster_path        = other.poster_path;
+        this.average_votes      = other.average_votes;
+    }
+
+    /**
      * Indicates whether the movie is only for adults or not
      * @return <code>true</code> if the movie is only for adults and <code>false</code> if not
      */
@@ -121,4 +135,14 @@ public class MovieInfoContainer implements Serializable, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeSerializable(this);
     }
+
+    public static final Parcelable.Creator<MovieInfoContainer> CREATOR = new Parcelable.Creator<MovieInfoContainer>() {
+        public MovieInfoContainer createFromParcel(Parcel in) {
+            return new MovieInfoContainer(in);
+        }
+
+        public MovieInfoContainer[] newArray(int size) {
+            return new MovieInfoContainer[size];
+        }
+    };
 }
