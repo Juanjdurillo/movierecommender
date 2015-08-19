@@ -2,6 +2,8 @@ package com.example.android.movierecomender;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -23,17 +25,19 @@ import java.util.List;
 /**
  * This class implements a view for the movie recommended app.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     // ArrayAdapter feeding the GridView in the main Activity
     private MoviePosterAdapter movieAdapter = null;
     private ArrayList<MovieInfoContainer> cache  =  new ArrayList<>(20);
+    private String sortingKey;
     ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // this fragment should also show menu events (the refresh menu)
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
         setHasOptionsMenu(true);
     }
 
@@ -110,11 +114,18 @@ public class MainActivityFragment extends Fragment {
      * the database. The <code>FetchPopularMovies</code> extends <code>AsyncTask</code>
      */
     private void fetchMovies() {
-        String sorting_key =
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
+        sortingKey = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
         String key = getResources().getString(R.string.movie_db_key);
-        String [] params = {sorting_key, key};
+        String [] params = {sortingKey, key};
         new FetchPopularMovies(this.movieAdapter,this.cache).execute(params);
     }
 
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        String aux = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
+        if (!aux.equals(sortingKey))
+            this.fetchMovies();
+
+    }
 }
