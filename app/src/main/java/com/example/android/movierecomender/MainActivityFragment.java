@@ -1,8 +1,11 @@
 package com.example.android.movierecomender;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -17,6 +20,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
+import org.apache.http.conn.ClientConnectionManager;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +45,12 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         // this fragment should also show menu events (the refresh menu)
         PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -103,7 +115,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         return rootView;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -114,6 +125,8 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
      * the database. The <code>FetchPopularMovies</code> extends <code>AsyncTask</code>
      */
     private void fetchMovies() {
+        if (!this.isNetworkAvailable())
+            return;
         sortingKey = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
         String key = getResources().getString(R.string.movie_db_key);
         String [] params = {sortingKey, key};
@@ -128,4 +141,11 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             this.fetchMovies();
 
     }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo!=null && networkInfo.isConnected();
+    }
+
 }
