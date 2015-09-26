@@ -58,7 +58,10 @@ public class TestDB extends AndroidTestCase {
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_SUMMARY);
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_TITLE);
-        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_VOTES);
+        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_USER_VOTES);
+        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_POPULARITY);
+        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_PEOPLE_VOTES);
+        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_REVENUE);
 
         int columnIdx = c.getColumnIndex("name");
 

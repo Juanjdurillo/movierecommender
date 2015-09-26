@@ -2,6 +2,7 @@ package com.example.android.movierecomender;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Movie;
 import android.test.AndroidTestCase;
 
 import com.example.android.movierecomender.data.MovieContract;
@@ -22,7 +23,10 @@ public class TestUtilities  extends AndroidTestCase {
         movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_URI, "localhost");
         movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, TEST_DATE);
         movieValues.put(MovieContract.MovieEntry.COLUMN_SUMMARY, "Se arma el belen en una casa por navidad");
-        movieValues.put(MovieContract.MovieEntry.COLUMN_VOTES, 800);
+        movieValues.put(MovieContract.MovieEntry.COLUMN_USER_VOTES, 800);
+        movieValues.put(MovieContract.MovieEntry.COLUMN_PEOPLE_VOTES, 30);
+        movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, 3.8);
+        movieValues.put(MovieContract.MovieEntry.COLUMN_REVENUE, 3000);
         return movieValues;
     }
 
