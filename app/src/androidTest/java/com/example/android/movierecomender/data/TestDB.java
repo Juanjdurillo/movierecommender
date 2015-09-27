@@ -1,12 +1,9 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
-
-import com.example.android.movierecomender.data.MovieContract;
-import com.example.android.movierecomender.data.MovieDBHelper;
 
 import java.util.HashSet;
 

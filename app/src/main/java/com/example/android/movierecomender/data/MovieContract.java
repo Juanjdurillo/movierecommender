@@ -58,5 +58,13 @@ public class MovieContract {
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static Uri buildMovieWithTitle(String title) {
+            return CONTENT_URI.buildUpon().appendPath(title).build();
+        }
+
+        public static String getTitleFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 }

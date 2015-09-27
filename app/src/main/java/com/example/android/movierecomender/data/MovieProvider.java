@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 /**
@@ -18,7 +19,7 @@ public class MovieProvider extends ContentProvider {
     static final int MOVIES_WITH_TITLE = 101;
 
     /* this function will create a UriMatcher for this provider */
-    static UriMatcher buildUriMatcher()
+    public static UriMatcher buildUriMatcher()
     {
         final UriMatcher matcher    = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority      = MovieContract.CONTENT_AUTHORITY;
@@ -34,8 +35,9 @@ public class MovieProvider extends ContentProvider {
     private Cursor getMovieByTitle(Uri uri, String [] projection, String sortOrder) {
         String movieTitle = MovieContract.MovieEntry.getTitleFromUri(uri);
 
-        String selection =
-        String [] selectionARgs = new String[]{movieTitle};
+        String selection = MovieContract.MovieEntry.TABLE_NAME+
+                "."+MovieContract.MovieEntry.COLUMN_TITLE+" = ?";
+        String [] selectionArgs = new String[]{movieTitle};
 
         return dbHelper.getReadableDatabase().query(MovieContract.MovieEntry.TABLE_NAME,
                 projection,
@@ -69,10 +71,13 @@ public class MovieProvider extends ContentProvider {
                     sortOrder
             );
                 break;
-            case MOVIES_WITH_TITLE =
+            case MOVIES_WITH_TITLE :
+                retCursor = getMovieByTitle(uri, projection, sortOrder);
+                break;
+            default :
+                throw new UnsupportedOperationException("Unknown uri: "+uri);
         }
-
-
+        retCursor.setNotificationUri(getContext().getContentResolver(),uri);
         return retCursor;
     }
 
@@ -92,16 +97,63 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        final int match = uriMatcher.match(uri);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Uri retUri = null;
+
+        switch (match) {
+            case MOVIES:
+                long _id = db.insert(MovieContract.MovieEntry.TABLE_NAME,null,values);
+                if (_id > 0)
+                    retUri = MovieContract.MovieEntry.buildMovieUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row in the database: "+uri);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: "+uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri,null);
+        return retUri;
+
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = uriMatcher.match(uri);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int rowsDeleted = 0;
+
+        switch (match) {
+            case MOVIES:
+                rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME,selection,selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: "+ uri);
+
+        }
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+        return rowsDeleted;
+
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = uriMatcher.match(uri);
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int rowsUpdated = 0;
+        switch (match) {
+            case MOVIES:
+                rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME,values,selection,selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: "+uri);
+        }
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+        return rowsUpdated;
     }
 }
