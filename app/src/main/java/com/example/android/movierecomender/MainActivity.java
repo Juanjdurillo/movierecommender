@@ -10,10 +10,25 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    boolean twoPanelVersion = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_recomender_entry_point);
+        setContentView(R.layout.activity_main);
+        Log.e(this.getClass().getName(), findViewById(R.id.movie_detail_container)+"");
+        if (findViewById(R.id.movie_detail_container)!=null) {
+            //there is a container for the movie detail fragment
+            twoPanelVersion = true;
+
+            Log.e(this.getClass().getName(), "Two panels identified@");
+            if (savedInstanceState==null)
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new ShowMovieDetails.DetailedMovieFragment()).commit();
+
+        } else {
+            twoPanelVersion = false;
+        }
+
     }
 
 

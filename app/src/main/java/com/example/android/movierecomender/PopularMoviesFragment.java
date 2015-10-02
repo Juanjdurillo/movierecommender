@@ -4,12 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import com.example.android.movierecomender.data.MovieContract;
+
 import org.apache.http.conn.ClientConnectionManager;
 
 import java.util.ArrayList;
@@ -31,7 +38,8 @@ import java.util.List;
 /**
  * This class implements a view for the movie recommended app.
  */
-public class MainActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class PopularMoviesFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener
+                                                                 {
 
     // ArrayAdapter feeding the GridView in the main Activity
     private MoviePosterAdapter movieAdapter = null;
@@ -127,7 +135,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     private void fetchMovies() {
         if (!this.isNetworkAvailable())
             return;
-        sortingKey = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
+        sortingKey = Utility.getCurrentSortingMethod(this.getActivity().getBaseContext());
         String key = getResources().getString(R.string.movie_db_key);
         String [] params = {sortingKey, key};
         new FetchPopularMovies(this.movieAdapter,this.cache).execute(params);
@@ -136,10 +144,9 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        String aux = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.preferred_sorting_method_key),getString(R.string.default_sorting_method));
-        if (!aux.equals(sortingKey))
+        String newSortingKey = Utility.getCurrentSortingMethod(this.getActivity().getBaseContext());
+        if (!newSortingKey.equals(sortingKey))
             this.fetchMovies();
-
     }
 
     public boolean isNetworkAvailable() {

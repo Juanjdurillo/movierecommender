@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MovieRecomender.iml" filepath="$PROJECT_DIR$/MovieRecomender.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/movierecommender.iml" filepath="$PROJECT_DIR$/movierecommender.iml" />
     </modules>
   </component>
 </project>
