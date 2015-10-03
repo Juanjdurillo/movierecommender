@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements PopularMoviesFragment.Callback {
 
     boolean twoPanelVersion = false;
 
@@ -16,12 +16,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e(this.getClass().getName(), findViewById(R.id.movie_detail_container)+"");
         if (findViewById(R.id.movie_detail_container)!=null) {
             //there is a container for the movie detail fragment
             twoPanelVersion = true;
-
-            Log.e(this.getClass().getName(), "Two panels identified@");
             if (savedInstanceState==null)
                 getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new ShowMovieDetails.DetailedMovieFragment()).commit();
 
@@ -53,5 +50,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(MovieInfoContainer movie) {
+
     }
 }

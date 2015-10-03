@@ -104,12 +104,13 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MovieInfoContainer movie = movieAdapter.getItem(position);
-                Intent intent = (new Intent(getActivity(),
+                /*Intent intent = (new Intent(getActivity(),
                     ShowMovieDetails.class));
                     Bundle b = new Bundle();
                     b.putSerializable(MovieInfoContainer.class.getName(), movie);
                     intent.putExtras(b);
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    ((Callback) getActivity()).onItemSelected(movie);
                 }
             });
         if (savedInstanceState != null && !savedInstanceState.isEmpty())
@@ -155,4 +156,17 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
         return networkInfo!=null && networkInfo.isConnected();
     }
 
-}
+     /**
+      * A callback interface that all activities containing this fragment must
+      * implement. This mechanism allows activities to be notified of item
+      * selections.
+      */
+     public interface Callback {
+         /**
+          * DetailFragmentCallback for when an item has been selected.
+          */
+         public void onItemSelected(MovieInfoContainer movie);
+     }
+
+
+ }

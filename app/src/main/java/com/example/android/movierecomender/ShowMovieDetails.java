@@ -55,17 +55,18 @@ public class ShowMovieDetails extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_show_movie_details, container, false);
             if (intent!=null) {
                 Bundle b = intent.getExtras();
-                MovieInfoContainer movie = (MovieInfoContainer) b.getSerializable(MovieInfoContainer.class.getName());
-                ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
-                ((TextView) rootView.findViewById(R.id.movie_language)).setText(getResources().getString(R.string.movie_language_label)+"\t"+movie.getOriginalLanguage());
-                ((TextView) rootView.findViewById(R.id.release_date)).setText(getResources().getString(R.string.release_date_label)+"\t"+movie.getReleaseDate());
-                ((TextView) rootView.findViewById(R.id.average_votes)).setText(getResources().getString(R.string.average_votes_label)+"\t"+movie.getAverage_votes());
+                if (b!= null) {
+                    MovieInfoContainer movie = (MovieInfoContainer) b.getSerializable(MovieInfoContainer.class.getName());
+                    ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
+                    ((TextView) rootView.findViewById(R.id.movie_language)).setText(getResources().getString(R.string.movie_language_label) + "\t" + movie.getOriginalLanguage());
+                    ((TextView) rootView.findViewById(R.id.release_date)).setText(getResources().getString(R.string.release_date_label) + "\t" + movie.getReleaseDate());
+                    ((TextView) rootView.findViewById(R.id.average_votes)).setText(getResources().getString(R.string.average_votes_label) + "\t" + movie.getAverage_votes());
 
-                ((TextView) rootView.findViewById(R.id.movie_plot)).setText(getResources().getString(R.string.movie_plot_label)+"\t"+movie.getMoviePlot());
-                Picasso.with(rootView.getContext()).load(movie.getPosterPath()).into(
-                        (ImageView) rootView.findViewById(R.id.movie_thumnail));
-                ((ImageView) rootView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);
-
+                    ((TextView) rootView.findViewById(R.id.movie_plot)).setText(getResources().getString(R.string.movie_plot_label) + "\t" + movie.getMoviePlot());
+                    Picasso.with(rootView.getContext()).load(movie.getPosterPath()).into(
+                            (ImageView) rootView.findViewById(R.id.movie_thumnail));
+                    ((ImageView) rootView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);
+                }
             }
             return rootView;
         }
