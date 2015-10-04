@@ -1,21 +1,13 @@
 package com.example.android.movierecomender;
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,13 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-import com.example.android.movierecomender.data.MovieContract;
-
-import org.apache.http.conn.ClientConnectionManager;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -90,11 +76,11 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_movie_recomender_entry_point, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         this.movieAdapter = new MoviePosterAdapter(
                     getActivity(),
-                    R.layout.fragment_movie_recomender_entry_point,
+                    R.layout.fragment_main,
                     new ArrayList<MovieInfoContainer>()
         );
 

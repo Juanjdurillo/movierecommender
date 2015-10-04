@@ -19,6 +19,12 @@ public class MovieInfoContainer implements Serializable, Parcelable {
     private final String    release_date;
     private final String    poster_path;
 
+    public String getId() {
+        return id;
+    }
+
+    private final String    id;
+
 
     private final String    average_votes;
     private final String    poster_path_base = "http://image.tmdb.org/t/p/w185";
@@ -32,7 +38,7 @@ public class MovieInfoContainer implements Serializable, Parcelable {
      * @param release_date
      * @param poster_path
      */
-    public MovieInfoContainer(boolean only_adults, String original_title, String original_language, String movie_plot, String release_date, String poster_path, String average_votes) {
+    public MovieInfoContainer(boolean only_adults, String original_title, String original_language, String movie_plot, String release_date, String poster_path, String average_votes,String id) {
         this.only_adults        = only_adults;
         this.original_title     = original_title;
         this.original_language  = original_language;
@@ -40,6 +46,7 @@ public class MovieInfoContainer implements Serializable, Parcelable {
         this.release_date       = release_date;
         this.poster_path        = this.poster_path_base+poster_path;
         this.average_votes      = average_votes;
+        this.id                 = id;
     }
 
     /**
@@ -54,6 +61,7 @@ public class MovieInfoContainer implements Serializable, Parcelable {
         this.release_date       = other.release_date;
         this.poster_path        = other.poster_path;
         this.average_votes      = other.average_votes;
+        this.id                 = other.id;
     }
 
     /**

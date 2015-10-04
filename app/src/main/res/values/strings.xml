@@ -16,6 +16,6 @@
     <string name="movie_plot_label">Summary:</string>
 
     <!-- key to access to the movie db -->
-    <string name="movie_db_key"></string>
+    <string name="movie_db_key">d4f990c13b86967328554d1b956f3b85</string>
 
 </resources>

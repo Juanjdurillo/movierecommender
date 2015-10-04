@@ -54,6 +54,24 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
 
     @Override
     public void onItemSelected(MovieInfoContainer movie) {
+        if (twoPanelVersion) {
+            Log.e("se toco con la mano","se toco con la mano");
+            Bundle args = new Bundle();
+            args.putParcelable(MovieInfoContainer.class.getName(), movie);
 
+            ShowMovieDetails.DetailedMovieFragment fragment = new ShowMovieDetails.DetailedMovieFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
+
+        } else {
+            Intent intent = (new Intent(this, ShowMovieDetails.class));
+            Bundle b = new Bundle();
+            b.putSerializable(MovieInfoContainer.class.getName(), movie);
+            intent.putExtras(b);
+            startActivity(intent);
+        }
     }
 }
