@@ -26,6 +26,11 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
+            android:name=".ShowReviews"
+            android:label="@string/title_activity_show_reviews"
+            android:parentActivityName=".ShowMovieDetails" >
+        </activity>
+        <activity
             android:name=".SortPreferencesSetting"
             android:label="@string/title_activity_sort_preferences_setting"
             android:parentActivityName=".MainActivity">

@@ -1,4 +1,4 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 
+import com.example.android.movierecomender.MovieBasicInfo;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 /**
  * Array adapter to feed a list_view with Movie info
  */
-public class MoviePosterAdapter extends ArrayAdapter<MovieInfoContainer> implements Serializable {
+public class MoviePosterAdapter extends ArrayAdapter<MovieBasicInfo> implements Serializable {
     Context context;
 
-    public MoviePosterAdapter(Context context, int resource, ArrayList<MovieInfoContainer> objects) {
+    public MoviePosterAdapter(Context context, int resource, ArrayList<MovieBasicInfo> objects) {
         super(context, resource, objects);
         this.context = context;
     }
@@ -29,7 +30,7 @@ public class MoviePosterAdapter extends ArrayAdapter<MovieInfoContainer> impleme
     // application needed to be developed for June. I'm trying not to use it here to see the
     // potential benefits and drawbacks of one and the other approach
     public View getView(int position, View convertView, ViewGroup parent) {
-        MovieInfoContainer movie = getItem(position);
+        MovieBasicInfo movie = getItem(position);
         ImageView imageView;
 
         if (convertView==null) {

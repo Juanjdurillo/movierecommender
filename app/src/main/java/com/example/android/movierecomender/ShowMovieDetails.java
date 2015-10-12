@@ -3,27 +3,22 @@ package com.example.android.movierecomender;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.example.android.movierecomender.adapters.MovieDetailsAdapter;
+import com.example.android.movierecomender.fetchers.FetchVideos;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ShowMovieDetails extends ActionBarActivity {
@@ -35,7 +30,7 @@ public class ShowMovieDetails extends ActionBarActivity {
 
         if (savedInstanceState==null) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(MovieInfoContainer.class.getName(), (Parcelable) ((Bundle) getIntent().getExtras()).getSerializable(MovieInfoContainer.class.getName()));
+            arguments.putParcelable(MovieBasicInfo.class.getName(), (Parcelable) ((Bundle) getIntent().getExtras()).getSerializable(MovieBasicInfo.class.getName()));
             DetailedMovieFragment fragment = new DetailedMovieFragment();
             fragment.setArguments(arguments);
 
@@ -68,68 +63,44 @@ public class ShowMovieDetails extends ActionBarActivity {
     }
 
     public static class DetailedMovieFragment extends Fragment {
-        List<YouToubeLink> cache = new ArrayList<YouToubeLink>();
-        TrailersAdapter trailersAdapter = null;
+        MovieDetailsAdapter movieAdapter = null;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_show_movie_details, container, false);
-            Bundle arguments = getArguments();
-            if (arguments!=null) {
-                MovieInfoContainer movie = (MovieInfoContainer) arguments.getParcelable(MovieInfoContainer.class.getName());
+            View rootView = inflater.inflate(R.layout.fragment_details, container, false);
 
+            this.movieAdapter = new MovieDetailsAdapter(
+                    this.getActivity(),
+                    R.layout.fragment_details,
+                    new ArrayList<MovieInfoContainer>()
+            );
 
-                // Fetch for the YouTube links here
-                String key = getResources().getString(R.string.movie_db_key);
-                String [] params = {movie.getId(), key};
-                this.trailersAdapter = new TrailersAdapter(
-                        getActivity().getBaseContext(),
-                        R.id.listview_trailers,
-                        new ArrayList<YouToubeLink>());
-                new FetchVideos(this.trailersAdapter,this.cache).execute(params);
-
-
-
-                ListView listView = (ListView) rootView.findViewById(R.id.listview_trailers);
-                listView.setAdapter(this.trailersAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        YouToubeLink movie = trailersAdapter.getItem(position);
-                /*Intent intent = (new Intent(getActivity(),
-                    ShowMovieDetails.class));
-                    Bundle b = new Bundle();
-                    b.putSerializable(MovieInfoContainer.class.getName(), movie);
-                    intent.putExtras(b);
-                    startActivity(intent);*/
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(movie.getLink()));
-                        intent.putExtra("force_fullscreen",true);
+            ListView listView = (ListView) rootView.findViewById(R.id.list_movie);
+            listView.setAdapter(this.movieAdapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    MovieInfoContainer movie = movieAdapter.getItem(position);
+                    if (movie instanceof MovieVideoLink) {
+                        MovieVideoLink link = (MovieVideoLink) movie;
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.getLink()));
+                        intent.putExtra("force_fullscreen", true);
                         startActivity(intent);
                     }
-                });
+                }
+            });
 
 
-
-                    ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie.getOriginalTitle());
-                    ((TextView) rootView.findViewById(R.id.movie_language)).setText(getResources().getString(R.string.movie_language_label) + "\t" + movie.getOriginalLanguage());
-                    ((TextView) rootView.findViewById(R.id.release_date)).setText(getResources().getString(R.string.release_date_label) + "\t" + movie.getReleaseDate());
-                    ((TextView) rootView.findViewById(R.id.average_votes)).setText(getResources().getString(R.string.average_votes_label) + "\t" + movie.getAverage_votes());
-
-                    ((TextView) rootView.findViewById(R.id.movie_plot)).setText(getResources().getString(R.string.movie_plot_label) + "\t" + movie.getMoviePlot());
-                    Picasso.with(rootView.getContext()).load(movie.getPosterPath()).into(
-                            (ImageView) rootView.findViewById(R.id.movie_thumnail));
-                    ((ImageView) rootView.findViewById(R.id.movie_thumnail)).setVisibility(ImageView.VISIBLE);
+            Bundle arguments = getArguments();
+            MovieBasicInfo movie = (MovieBasicInfo) arguments.getParcelable(MovieBasicInfo.class.getName());
+            this.movieAdapter.add(movie);
 
 
-
-
-
-
-
-
-            }
+            String key = getResources().getString(R.string.movie_db_key);
+            String [] params = {movie.getId(), key};
+            new FetchVideos(this.movieAdapter).execute(params);
 
             return rootView;
         }

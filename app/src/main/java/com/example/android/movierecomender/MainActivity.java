@@ -1,9 +1,8 @@
 package com.example.android.movierecomender;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -53,11 +52,10 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
     }
 
     @Override
-    public void onItemSelected(MovieInfoContainer movie) {
+    public void onItemSelected(MovieBasicInfo movie) {
         if (twoPanelVersion) {
-            Log.e("se toco con la mano","se toco con la mano");
             Bundle args = new Bundle();
-            args.putParcelable(MovieInfoContainer.class.getName(), movie);
+            args.putParcelable(MovieBasicInfo.class.getName(), movie);
 
             ShowMovieDetails.DetailedMovieFragment fragment = new ShowMovieDetails.DetailedMovieFragment();
             fragment.setArguments(args);
@@ -69,7 +67,7 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
         } else {
             Intent intent = (new Intent(this, ShowMovieDetails.class));
             Bundle b = new Bundle();
-            b.putSerializable(MovieInfoContainer.class.getName(), movie);
+            b.putSerializable(MovieBasicInfo.class.getName(), movie);
             intent.putExtras(b);
             startActivity(intent);
         }

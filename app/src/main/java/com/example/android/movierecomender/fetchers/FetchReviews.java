@@ -1,9 +1,11 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.fetchers;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+
+import com.example.android.movierecomender.ReviewContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,15 +22,13 @@ import java.util.List;
 /**
  * Created by JuanJose on 10/3/2015.
  */
-public class FetchVideos extends AsyncTask<String, Void, List<YouToubeLink>> {
+public class FetchReviews extends AsyncTask<String, Void, List<ReviewContainer>> {
 
     private ArrayAdapter movieAdapter;
-    private List<YouToubeLink> cache;
-
 
     public static final String MOVIE_DB_URL                 =
             "http://api.themoviedb.org/3/movie/";
-    public static final String VIDEOS_LABEL                 = "/videos?";
+    public static final String VIDEOS_LABEL                 = "/reviews?";
     public static final String KEY_PARAMETER_LABEL          = "api_key";
     public static final String CONNECTION_ERROR              = "IO ERROR, INTERNET CONNECTION";
     public static final String IO_OPERATION_ERROR            = "IO OPERATION ERROR";
@@ -39,9 +39,8 @@ public class FetchVideos extends AsyncTask<String, Void, List<YouToubeLink>> {
     public static final String CONNECTION_TAG                = "CONNECTION";
 
 
-    public FetchVideos(ArrayAdapter adapter, List<YouToubeLink> cache) {
+    public FetchReviews(ArrayAdapter adapter) {
         this.movieAdapter = adapter;
-        this.cache  = cache;
     }
 
 
@@ -52,14 +51,16 @@ public class FetchVideos extends AsyncTask<String, Void, List<YouToubeLink>> {
      * <code>params[0]</code> indicates the movie id
      * <code>params[1]</code> indicates the movie_db user key
      */
-    protected List<YouToubeLink> doInBackground(String... params) {
+    protected List<ReviewContainer> doInBackground(String... params) {
 
         Uri uri_builder = Uri.parse(MOVIE_DB_URL + params[0] + VIDEOS_LABEL).buildUpon()
-                                   .appendQueryParameter(KEY_PARAMETER_LABEL, params[1]).build();
+                .appendQueryParameter(KEY_PARAMETER_LABEL, params[1]).build();
 
+
+        Log.e(this.getClass().getName(),uri_builder.getPath());
         HttpURLConnection movieDBConnection = null;
         String                      jSonStr           = null;
-        List<YouToubeLink>    res               = null;
+        List<ReviewContainer>    res               = null;
 
 
         try {
@@ -85,7 +86,7 @@ public class FetchVideos extends AsyncTask<String, Void, List<YouToubeLink>> {
                 movieDBConnection.disconnect();
 
         }
-Log.e("Juanjo",jSonStr);
+
         if (jSonStr != null) {
             res = parseMovieInformaton(jSonStr);
         }
@@ -95,27 +96,27 @@ Log.e("Juanjo",jSonStr);
     /**
      * This method parses a json string, extracting all the trailers links
      */
-    List<YouToubeLink> parseMovieInformaton(String jSonStr) {
+    List<ReviewContainer> parseMovieInformaton(String jSonStr) {
         if (jSonStr == null || jSonStr.isEmpty())
             return null;
 
-        List<YouToubeLink>    list_of_links = null;
+        List<ReviewContainer>    list_of_links = null;
 
-        final String ARRAY_OF_LINKS      = "results";
-        final String KEY_LABEL           = "key";
-        final String NAME_LABEL          = "name";
+        final String ARRAY_OF_REVIEWS      = "results";
+        final String AUTHOR_LABEL           = "author";
+        final String COMMENT_LABEL          = "content";
         try {
-            JSONArray array_of_json_movies = (new JSONObject(jSonStr)).getJSONArray(ARRAY_OF_LINKS);
+            JSONArray array_of_json_movies = (new JSONObject(jSonStr)).getJSONArray(ARRAY_OF_REVIEWS);
             list_of_links = new ArrayList<>(array_of_json_movies.length());
             try {
                 for (int i = 0; i < array_of_json_movies.length(); i++) {
                     JSONObject  json_movie          = array_of_json_movies.getJSONObject(i)             ;
-                    String      link                = json_movie.getString(KEY_LABEL)         ;
-                    String      name                = json_movie.getString(NAME_LABEL);
-                    YouToubeLink youToubeLink;
-                    youToubeLink = new YouToubeLink(link,name);
-                    Log.d(CONNECTION_TAG,youToubeLink.getLink());
-                    list_of_links.add(youToubeLink);
+                    String      author                = json_movie.getString(AUTHOR_LABEL)         ;
+                    String      comment                = json_movie.getString(COMMENT_LABEL);
+                    ReviewContainer review;
+                    review = new ReviewContainer(author, comment);
+                    Log.d(CONNECTION_TAG,review.getComment());
+                    list_of_links.add(review);
                 }
             } catch (JSONException e1) {
                 Log.e(CONNECTION_TAG,JSON_MOVIE_EXCEPTION);
@@ -130,11 +131,8 @@ Log.e("Juanjo",jSonStr);
     }
 
     @Override
-    protected void onPostExecute(List<YouToubeLink> result) {
+    protected void onPostExecute(List<ReviewContainer> result) {
         if (result!=null && result.size()>0) {
-            cache.clear();
-            movieAdapter.clear(); // remove information from the last call
-            cache.addAll(result);
             movieAdapter.addAll(result);
         }
     }

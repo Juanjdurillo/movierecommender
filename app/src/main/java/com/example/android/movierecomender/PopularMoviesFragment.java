@@ -1,13 +1,13 @@
 package com.example.android.movierecomender;
 
 import android.content.Context;
-
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+
+import com.example.android.movierecomender.adapters.MoviePosterAdapter;
+import com.example.android.movierecomender.fetchers.FetchPopularMovies;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
 
     // ArrayAdapter feeding the GridView in the main Activity
     private MoviePosterAdapter movieAdapter = null;
-    private ArrayList<MovieInfoContainer> cache  =  new ArrayList<>(20);
+    private ArrayList<MovieBasicInfo> cache  =  new ArrayList<>(20);
     private String sortingKey;
     ;
 
@@ -60,7 +63,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelableArrayList(MovieInfoContainer.class.getName(),this.cache);
+        savedInstanceState.putParcelableArrayList(MovieBasicInfo.class.getName(),this.cache);
     }
 
 
@@ -81,7 +84,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
         this.movieAdapter = new MoviePosterAdapter(
                     getActivity(),
                     R.layout.fragment_main,
-                    new ArrayList<MovieInfoContainer>()
+                    new ArrayList<MovieBasicInfo>()
         );
 
         GridView listView = (GridView) rootView.findViewById(R.id.grid_movies);
@@ -89,18 +92,18 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
         listView.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieInfoContainer movie = movieAdapter.getItem(position);
+                MovieBasicInfo movie = movieAdapter.getItem(position);
                 /*Intent intent = (new Intent(getActivity(),
                     ShowMovieDetails.class));
                     Bundle b = new Bundle();
-                    b.putSerializable(MovieInfoContainer.class.getName(), movie);
+                    b.putSerializable(MovieBasicInfo.class.getName(), movie);
                     intent.putExtras(b);
                     startActivity(intent);*/
                     ((Callback) getActivity()).onItemSelected(movie);
                 }
             });
         if (savedInstanceState != null && !savedInstanceState.isEmpty())
-            this.cache = savedInstanceState.getParcelableArrayList(MovieInfoContainer.class.getName());
+            this.cache = savedInstanceState.getParcelableArrayList(MovieBasicInfo.class.getName());
 
         if (this.cache.size() > 0)
             this.movieAdapter.addAll(this.cache);
@@ -120,8 +123,11 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
      * the database. The <code>FetchPopularMovies</code> extends <code>AsyncTask</code>
      */
     private void fetchMovies() {
-        if (!this.isNetworkAvailable())
+        if (!this.isNetworkAvailable()) {
+            Log.e("Network is not ", "Network is not available");
             return;
+        }
+        Log.e("Network is avaie", "Network is aable");
         sortingKey = Utility.getCurrentSortingMethod(this.getActivity().getBaseContext());
         String key = getResources().getString(R.string.movie_db_key);
         String [] params = {sortingKey, key};
@@ -151,7 +157,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
          /**
           * DetailFragmentCallback for when an item has been selected.
           */
-         public void onItemSelected(MovieInfoContainer movie);
+         public void onItemSelected(MovieBasicInfo movie);
      }
 
 
