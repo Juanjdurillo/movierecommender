@@ -1,24 +1,11 @@
 package com.example.android.movierecomender;
 
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import com.example.android.movierecomender.adapters.MovieDetailsAdapter;
-import com.example.android.movierecomender.fetchers.FetchVideos;
-
-import java.util.ArrayList;
 
 
 public class ShowMovieDetails extends ActionBarActivity {
@@ -26,7 +13,7 @@ public class ShowMovieDetails extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_movie_details);
+        setContentView(R.layout.activity_details);
 
         if (savedInstanceState==null) {
             Bundle arguments = new Bundle();
@@ -61,49 +48,4 @@ public class ShowMovieDetails extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public static class DetailedMovieFragment extends Fragment {
-        MovieDetailsAdapter movieAdapter = null;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-
-            View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-
-            this.movieAdapter = new MovieDetailsAdapter(
-                    this.getActivity(),
-                    R.layout.fragment_details,
-                    new ArrayList<MovieInfoContainer>()
-            );
-
-            ListView listView = (ListView) rootView.findViewById(R.id.list_movie);
-            listView.setAdapter(this.movieAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    MovieInfoContainer movie = movieAdapter.getItem(position);
-                    if (movie instanceof MovieVideoLink) {
-                        MovieVideoLink link = (MovieVideoLink) movie;
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.getLink()));
-                        intent.putExtra("force_fullscreen", true);
-                        startActivity(intent);
-                    }
-                }
-            });
-
-
-            Bundle arguments = getArguments();
-            MovieBasicInfo movie = (MovieBasicInfo) arguments.getParcelable(MovieBasicInfo.class.getName());
-            this.movieAdapter.add(movie);
-
-
-            String key = getResources().getString(R.string.movie_db_key);
-            String [] params = {movie.getId(), key};
-            new FetchVideos(this.movieAdapter).execute(params);
-
-            return rootView;
-        }
-    }
-
 }

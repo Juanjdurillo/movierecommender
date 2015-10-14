@@ -11,12 +11,13 @@
         android:layout_width="wrap_content"
         android:gravity="center_horizontal"
         android:layout_gravity="start"
-        />
+
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/review_content"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="fill_horizontal"
         android:layout_gravity="start"
-        />
+        android:typeface="serif" />
 </LinearLayout>

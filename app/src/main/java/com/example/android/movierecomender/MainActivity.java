@@ -7,7 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity implements PopularMoviesFragment.Callback {
+public class MainActivity extends ActionBarActivity implements PopularMoviesFragment.Callback,
+                                                               DetailedMovieFragment.Callback{
 
     boolean twoPanelVersion = false;
 
@@ -19,7 +20,7 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
             //there is a container for the movie detail fragment
             twoPanelVersion = true;
             if (savedInstanceState==null)
-                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new ShowMovieDetails.DetailedMovieFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new DetailedMovieFragment()).commit();
 
         } else {
             twoPanelVersion = false;
@@ -52,12 +53,13 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
     }
 
     @Override
-    public void onItemSelected(MovieBasicInfo movie) {
+    public void onMovieSelected(MovieBasicInfo movie) {
         if (twoPanelVersion) {
             Bundle args = new Bundle();
             args.putParcelable(MovieBasicInfo.class.getName(), movie);
+            args.putBoolean("TWO_PANELS",true);
 
-            ShowMovieDetails.DetailedMovieFragment fragment = new ShowMovieDetails.DetailedMovieFragment();
+            DetailedMovieFragment fragment = new DetailedMovieFragment();
             fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
@@ -70,6 +72,23 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
             b.putSerializable(MovieBasicInfo.class.getName(), movie);
             intent.putExtras(b);
             startActivity(intent);
+        }
+    }
+
+
+    @Override
+    public void onReviewsSelected(MovieBasicInfo movie) {
+        if (twoPanelVersion) {
+            Bundle args = new Bundle();
+            args.putParcelable(MovieBasicInfo.class.getName(), movie);
+
+            ShowReviewsFragment fragment = new ShowReviewsFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
+
         }
     }
 }

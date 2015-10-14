@@ -133,6 +133,7 @@ public class FetchReviews extends AsyncTask<String, Void, List<ReviewContainer>>
     @Override
     protected void onPostExecute(List<ReviewContainer> result) {
         if (result!=null && result.size()>0) {
+            Log.e("ADAPTER","Adding movies");
             movieAdapter.addAll(result);
         }
     }

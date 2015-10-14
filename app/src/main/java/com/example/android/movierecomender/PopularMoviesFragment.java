@@ -99,7 +99,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
                     b.putSerializable(MovieBasicInfo.class.getName(), movie);
                     intent.putExtras(b);
                     startActivity(intent);*/
-                    ((Callback) getActivity()).onItemSelected(movie);
+                    ((Callback) getActivity()).onMovieSelected(movie);
                 }
             });
         if (savedInstanceState != null && !savedInstanceState.isEmpty())
@@ -157,7 +157,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
          /**
           * DetailFragmentCallback for when an item has been selected.
           */
-         public void onItemSelected(MovieBasicInfo movie);
+         public void onMovieSelected(MovieBasicInfo movie);
      }
 
 

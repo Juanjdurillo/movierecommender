@@ -23,9 +23,9 @@ public class ReviewAdapter extends ArrayAdapter<ReviewContainer>{
     public View getView(int position, View convertView, ViewGroup parent) {
         ReviewContainer review = getItem(position);
         View view = null;
-        view = LayoutInflater.from(context).inflate(R.layout.layout_movie_details, parent, false);
-        ((TextView) view.findViewById(R.id.review_author)).setText(review.getAuthor());
-        ((TextView) view.findViewById(R.id.movie_language)).setText(review.getComment());
+        view = LayoutInflater.from(context).inflate(R.layout.review_entry_layout, parent, false);
+        ((TextView) view.findViewById(R.id.review_author)).setText("Author: "+review.getAuthor());
+        ((TextView) view.findViewById(R.id.review_content)).setText("Review: "+review.getComment());
         return view;
     }
 
