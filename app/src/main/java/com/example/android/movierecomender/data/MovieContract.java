@@ -45,13 +45,13 @@ public class MovieContract {
         /*stores the language of the movie as a string */
         public static final String COLUMN_LANGUAGE  = "original_language";
         /*stores the number of votes of this movie as an integer */
-        public static final String COLUMN_USER_VOTES = "user_votes";
+        //public static final String COLUMN_USER_VOTES = "user_votes";
         /*stores peoples votes on this movie */
-        public static final String COLUMN_PEOPLE_VOTES = "people_votes";
+        //public static final String COLUMN_PEOPLE_VOTES = "people_votes";
         /*stores the revenue of this movie as an integer */
-        public static final String COLUMN_REVENUE = "revenue";
+        //public static final String COLUMN_REVENUE = "revenue";
         /*stores the popularity of the movie as a double */
-        public static final String COLUMN_POPULARITY = "popularity";
+        //public static final String COLUMN_POPULARITY = "popularity";
         /*stores the plot of the movie as a text*/
         public static final String COLUMN_SUMMARY = "summary";
 

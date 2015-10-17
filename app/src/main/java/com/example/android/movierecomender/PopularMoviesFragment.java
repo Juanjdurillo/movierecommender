@@ -2,6 +2,7 @@ package com.example.android.movierecomender;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import com.example.android.movierecomender.adapters.MoviePosterAdapter;
+import com.example.android.movierecomender.data.MovieContract;
 import com.example.android.movierecomender.fetchers.FetchPopularMovies;
 
 import java.util.ArrayList;
@@ -27,8 +29,8 @@ import java.util.ArrayList;
 /**
  * This class implements a view for the movie recommended app.
  */
-public class PopularMoviesFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener
-                                                                 {
+public class PopularMoviesFragment extends Fragment
+                                   implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     // ArrayAdapter feeding the GridView in the main Activity
     private MoviePosterAdapter movieAdapter = null;
@@ -63,7 +65,7 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelableArrayList(MovieBasicInfo.class.getName(),this.cache);
+        savedInstanceState.putParcelableArrayList(MovieBasicInfo.class.getName(), this.cache);
     }
 
 
@@ -127,11 +129,33 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
             Log.e("Network is not ", "Network is not available");
             return;
         }
-        Log.e("Network is avaie", "Network is aable");
+
         sortingKey = Utility.getCurrentSortingMethod(this.getActivity().getBaseContext());
-        String key = getResources().getString(R.string.movie_db_key);
-        String [] params = {sortingKey, key};
-        new FetchPopularMovies(this.movieAdapter,this.cache).execute(params);
+        Log.e("SORTINGKEY",sortingKey);
+        if (!sortingKey.equals("favourites")) {
+            String key = getResources().getString(R.string.movie_db_key);
+            String[] params = {sortingKey, key};
+            new FetchPopularMovies(this.movieAdapter, this.cache).execute(params);
+        } else { // user wants the movie from the database
+            Cursor cursor = this.getActivity().getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,null,null,null,null);
+            this.cache.clear();
+            this.movieAdapter.clear();
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                do {
+                    String title =  cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE));
+                    String lan =    cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_LANGUAGE));
+                    String summary = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_SUMMARY));
+                    String releaseDAte= cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE));
+                    String poster = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_URI));
+                    MovieBasicInfo mvi = new MovieBasicInfo(false,title,lan,summary,releaseDAte,poster,"10","14");
+                    this.cache.add(mvi);
+                    this.movieAdapter.add(mvi);
+
+                } while (cursor.moveToNext());
+            }
+
+        }
     }
 
 
@@ -148,7 +172,8 @@ public class PopularMoviesFragment extends Fragment implements SharedPreferences
         return networkInfo!=null && networkInfo.isConnected();
     }
 
-     /**
+
+    /**
       * A callback interface that all activities containing this fragment must
       * implement. This mechanism allows activities to be notified of item
       * selections.

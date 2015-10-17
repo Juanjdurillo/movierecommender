@@ -24,7 +24,7 @@ public class DetailedMovieFragment extends Fragment {
         super();
         Bundle arguments = getArguments();
         if (arguments!=null)
-            twoPanels = true; //arguments.getBoolean("TWO_PANELS");
+            arguments.getBoolean("TWO_PANELS");
     }
 
     @Override
