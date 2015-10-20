@@ -1,4 +1,4 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.container;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -18,15 +18,13 @@ public class MovieBasicInfo implements Serializable, Parcelable, MovieInfoContai
     private final String    movie_plot;
     private final String    release_date;
     private final String    poster_path;
+    private final double    average_votes;
+    private final int    id;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    private final String    id;
-
-
-    private final String    average_votes;
     private final String    poster_path_base = "http://image.tmdb.org/t/p/w185";
 
     /**
@@ -37,8 +35,10 @@ public class MovieBasicInfo implements Serializable, Parcelable, MovieInfoContai
      * @param movie_plot
      * @param release_date
      * @param poster_path
+     * @param average_votes
+     * @param id
      */
-    public MovieBasicInfo(boolean only_adults, String original_title, String original_language, String movie_plot, String release_date, String poster_path, String average_votes, String id) {
+    public MovieBasicInfo(boolean only_adults, String original_title, String original_language, String movie_plot, String release_date, String poster_path, double average_votes, int id) {
         this.only_adults        = only_adults;
         this.original_title     = original_title;
         this.original_language  = original_language;
@@ -129,7 +129,7 @@ public class MovieBasicInfo implements Serializable, Parcelable, MovieInfoContai
      * Obtains the average votes for this movie
      * @return A <code>String</code> with the average votes
      */
-    public String getAverage_votes() {
+    public double getAverage_votes() {
         return average_votes;
     }
 

@@ -21,15 +21,14 @@ public class TestUtilities  extends AndroidTestCase {
     static final long TEST_DATE = 1419033600L;
     static ContentValues createMovieRow () {
         ContentValues movieValues = new ContentValues();
+        movieValues.put(MovieContract.MovieEntry._ID,"42");
         movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, "Se armó el belén");
         movieValues.put(MovieContract.MovieEntry.COLUMN_LANGUAGE, "es");
         movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_URI, "localhost");
-        movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, TEST_DATE);
+        movieValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, "09/09/1982");
         movieValues.put(MovieContract.MovieEntry.COLUMN_SUMMARY, "Se arma el belen en una casa por navidad");
-        /*movieValues.put(MovieContract.MovieEntry.COLUMN_USER_VOTES, 800);
         movieValues.put(MovieContract.MovieEntry.COLUMN_PEOPLE_VOTES, 30);
-        movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, 3.8);
-        movieValues.put(MovieContract.MovieEntry.COLUMN_REVENUE, 3000);*/
+        movieValues.put(MovieContract.MovieEntry.COLUMN_ADULTS,0);
         return movieValues;
     }
 

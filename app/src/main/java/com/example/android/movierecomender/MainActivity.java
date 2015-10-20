@@ -3,8 +3,11 @@ package com.example.android.movierecomender;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.android.movierecomender.container.MovieBasicInfo;
 
 
 public class MainActivity extends ActionBarActivity implements PopularMoviesFragment.Callback,
@@ -57,6 +60,7 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
         if (twoPanelVersion) {
             Bundle args = new Bundle();
             args.putParcelable(MovieBasicInfo.class.getName(), movie);
+            Log.e("TWO_PANELS", "Pongo true");
             args.putBoolean("TWO_PANELS",true);
 
             DetailedMovieFragment fragment = new DetailedMovieFragment();
@@ -70,6 +74,8 @@ public class MainActivity extends ActionBarActivity implements PopularMoviesFrag
             Intent intent = (new Intent(this, ShowMovieDetails.class));
             Bundle b = new Bundle();
             b.putSerializable(MovieBasicInfo.class.getName(), movie);
+            Log.e("TWO_PANELS", "Pongo falso");
+            b.putBoolean("TWO_PANELS",false);
             intent.putExtras(b);
             startActivity(intent);
         }

@@ -55,10 +55,9 @@ public class TestDB extends AndroidTestCase {
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_SUMMARY);
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_TITLE);
-        /*movieTableColumns.add(MovieContract.MovieEntry.COLUMN_USER_VOTES);
-        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_POPULARITY);
         movieTableColumns.add(MovieContract.MovieEntry.COLUMN_PEOPLE_VOTES);
-        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_REVENUE);*/
+        movieTableColumns.add(MovieContract.MovieEntry.COLUMN_ADULTS);
+
 
         int columnIdx = c.getColumnIndex("name");
 
@@ -68,7 +67,7 @@ public class TestDB extends AndroidTestCase {
             movieTableColumns.remove(columnName);
         }while (c.moveToNext());
 
-        assertTrue("Error the database does not conatain all the required columns ", movieTableColumns.isEmpty());
+        assertTrue("Error the database does not contain all the required columns ", movieTableColumns.isEmpty());
         db.close();
     }
 

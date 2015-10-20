@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
 import com.example.android.movierecomender.adapters.MoviePosterAdapter;
+import com.example.android.movierecomender.container.MovieBasicInfo;
 import com.example.android.movierecomender.data.MovieContract;
 import com.example.android.movierecomender.fetchers.FetchPopularMovies;
 
@@ -132,7 +133,7 @@ public class PopularMoviesFragment extends Fragment
 
         sortingKey = Utility.getCurrentSortingMethod(this.getActivity().getBaseContext());
         Log.e("SORTINGKEY",sortingKey);
-        if (!sortingKey.equals("favourites")) {
+        if (!sortingKey.equals(getActivity().getString(R.string.favourites))) {
             String key = getResources().getString(R.string.movie_db_key);
             String[] params = {sortingKey, key};
             new FetchPopularMovies(this.movieAdapter, this.cache).execute(params);
@@ -148,7 +149,11 @@ public class PopularMoviesFragment extends Fragment
                     String summary = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_SUMMARY));
                     String releaseDAte= cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE));
                     String poster = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_URI));
-                    MovieBasicInfo mvi = new MovieBasicInfo(false,title,lan,summary,releaseDAte,poster,"10","14");
+                    int    adults = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ADULTS));
+                    boolean onlyAdults = (adults > 0) ? true : false;
+                    Double peopleVotes = cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_PEOPLE_VOTES));
+                    int id = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry._ID));
+                    MovieBasicInfo mvi = new MovieBasicInfo(onlyAdults,title,lan,summary,releaseDAte,poster,peopleVotes,id);
                     this.cache.add(mvi);
                     this.movieAdapter.add(mvi);
 

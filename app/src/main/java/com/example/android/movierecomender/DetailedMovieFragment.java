@@ -11,34 +11,37 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.movierecomender.adapters.MovieDetailsAdapter;
+import com.example.android.movierecomender.container.MovieBasicInfo;
+import com.example.android.movierecomender.container.MovieInfoContainer;
+import com.example.android.movierecomender.container.MovieVideoLink;
 import com.example.android.movierecomender.fetchers.FetchVideos;
 
 import java.util.ArrayList;
 
 public class DetailedMovieFragment extends Fragment {
-    MovieDetailsAdapter movieAdapter = null;
-    private boolean twoPanels = true;
-
-
-    public DetailedMovieFragment() {
-        super();
-        Bundle arguments = getArguments();
-        if (arguments!=null)
-            arguments.getBoolean("TWO_PANELS");
-    }
+    MovieDetailsAdapter         movieAdapter = null;
+    private boolean             twoPanels = true;
+    private MovieInfoContainer  movie = null;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+        Bundle sourceOfData;
+
+        sourceOfData = (savedInstanceState != null) ? savedInstanceState : getArguments();
+        if (sourceOfData != null) {
+            movie     = sourceOfData.getParcelable(MovieBasicInfo.class.getName());
+            twoPanels = sourceOfData.getBoolean("TWO_PANELS");
+        } else {
+            return null;
+        }
 
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
-
         this.movieAdapter = new MovieDetailsAdapter(
                 this.getActivity(),
                 R.layout.fragment_details,
                 new ArrayList<MovieInfoContainer>()
         );
-
         ListView listView = (ListView) rootView.findViewById(R.id.list_movie);
         listView.setAdapter(this.movieAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,20 +68,19 @@ public class DetailedMovieFragment extends Fragment {
             }
         });
 
-
-        Bundle arguments = getArguments();
-        if (arguments!=null) {
-            MovieBasicInfo movie = (MovieBasicInfo) arguments.getParcelable(MovieBasicInfo.class.getName());
-            if (movie != null) {
-                this.movieAdapter.add(movie);
-                this.movieAdapter.add(movie);
-                String key = getResources().getString(R.string.movie_db_key);
-                String[] params = {movie.getId(), key};
-                new FetchVideos(this.movieAdapter).execute(params);
-            }
-        }
-
+        this.movieAdapter.add(movie);
+        this.movieAdapter.add(movie);
+        String key = getResources().getString(R.string.movie_db_key);
+        String[] params = {new Integer(((MovieBasicInfo) movie).getId()).toString(), key};
+        new FetchVideos(this.movieAdapter).execute(params);
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable(MovieBasicInfo.class.getName(),(MovieBasicInfo) movie);
+        savedInstanceState.putBoolean("TWO_PANELS",twoPanels);
     }
 
     public interface Callback {

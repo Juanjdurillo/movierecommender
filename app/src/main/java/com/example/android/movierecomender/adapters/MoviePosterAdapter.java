@@ -9,7 +9,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 
-import com.example.android.movierecomender.MovieBasicInfo;
+import com.example.android.movierecomender.container.MovieBasicInfo;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;

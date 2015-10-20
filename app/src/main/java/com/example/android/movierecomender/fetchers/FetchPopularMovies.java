@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.example.android.movierecomender.MovieBasicInfo;
-import com.example.android.movierecomender.MovieInfoContainer;
+import com.example.android.movierecomender.container.MovieBasicInfo;
+import com.example.android.movierecomender.container.MovieInfoContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,13 +134,17 @@ public class FetchPopularMovies  extends AsyncTask<String, Void, List<MovieInfoC
                     String      movie_poster_path   = json_movie.getString(POSTER_PATH_LABEL)           ;
                     String      movie_average_votes = json_movie.getString(AVERAGE_VOTES_LABEL)         ;
                     String      movie_id            = json_movie.getString(ID_LABEL)                    ;
-                    MovieBasicInfo movie;
-                    movie = new MovieBasicInfo(is_adult_movie,movie_title,movie_language,movie_plot,movie_release,movie_poster_path,movie_average_votes,movie_id);
-                    Log.d(CONNECTION_TAG,movie.toString());
-                    list_of_movies.add(movie);
+
+                    if ((movie_poster_path!=null) && (!movie_poster_path.isEmpty()) &&
+                        (movie_plot!=null) && (!movie_plot.isEmpty())) {
+                        MovieBasicInfo movie;
+                        movie = new MovieBasicInfo(is_adult_movie, movie_title, movie_language, movie_plot, movie_release, movie_poster_path, new Double(movie_average_votes), new Integer(movie_id));
+                        Log.d(CONNECTION_TAG, movie.toString());
+                        list_of_movies.add(movie);
+                    }
                 }
             } catch (JSONException e1) {
-                Log.e(CONNECTION_TAG,JSON_MOVIE_EXCEPTION);
+                Log.e(CONNECTION_TAG, JSON_MOVIE_EXCEPTION);
             }
 
         } catch (JSONException e) {

@@ -1,4 +1,6 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.container;
+
+import com.example.android.movierecomender.container.MovieInfoContainer;
 
 /**
  * Created by JuanJose on 10/3/2015.

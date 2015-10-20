@@ -28,7 +28,7 @@
         <activity
             android:name=".ShowReviews"
             android:label="@string/title_activity_show_reviews"
-            android:parentActivityName=".ShowMovieDetails" >
+            android:parentActivityName=".MainActivity" >
         </activity>
         <activity
             android:name=".SortPreferencesSetting"

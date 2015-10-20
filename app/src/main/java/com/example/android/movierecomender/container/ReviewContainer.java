@@ -1,9 +1,11 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.container;
+
+import com.example.android.movierecomender.container.MovieInfoContainer;
 
 /**
  * Class to store the information of a movie review
  */
-public class ReviewContainer {
+public class ReviewContainer implements MovieInfoContainer {
     final private String author;
     final private String comment;
 

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
-import com.example.android.movierecomender.ReviewContainer;
+import com.example.android.movierecomender.container.ReviewContainer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

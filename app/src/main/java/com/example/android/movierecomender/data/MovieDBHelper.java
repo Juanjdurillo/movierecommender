@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MovieDBHelper extends SQLiteOpenHelper {
 
     // increase this number when the database schema gets changed
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     /*name of the database file*/
     public static final String DATABASE_NAME = "movies.db";
@@ -24,12 +24,14 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieContract.MovieEntry.TABLE_NAME + " (" +
-        MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY," +
         MovieContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL,"+
-        MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " INTEGER NOT NULL,"+
+        MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL,"+
         MovieContract.MovieEntry.COLUMN_POSTER_URI + " TEXT NOT NULL,"+
         MovieContract.MovieEntry.COLUMN_LANGUAGE + " TEXT NOT NULL,"+
-        MovieContract.MovieEntry.COLUMN_SUMMARY + " TEXT NOT NULL"+
+        MovieContract.MovieEntry.COLUMN_SUMMARY + " TEXT NOT NULL,"+
+        MovieContract.MovieEntry.COLUMN_ADULTS + " INTEGER NOT NULL,"+
+        MovieContract.MovieEntry.COLUMN_PEOPLE_VOTES + " REAL NOT NULL"+
         ");";
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
     }

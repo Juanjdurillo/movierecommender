@@ -15,6 +15,9 @@
     <string name="release_date_label">Release date:</string>
     <string name="average_votes_label">Votes:</string>
     <string name="movie_plot_label">Summary:</string>
+    <string name="add_to_favourites">Add to favourites ...</string>
+    <string name="remove_from_favourites">Remove from favourites ...</string>
+    <string name="favourites">favourites</string>
 
     <!-- key to access to the movie db -->
     <string name="movie_db_key"></string>

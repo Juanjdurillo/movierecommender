@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.movierecomender.container.MovieBasicInfo;
+
 
 public class ShowMovieDetails extends ActionBarActivity {
 
@@ -26,6 +28,7 @@ public class ShowMovieDetails extends ActionBarActivity {
                     .commit();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
