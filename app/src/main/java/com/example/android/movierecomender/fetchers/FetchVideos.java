@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,9 +40,10 @@ public class FetchVideos extends AsyncTask<String, Void, List<MovieInfoContainer
     // Tags for debugging
     public static final String CONNECTION_TAG                = "CONNECTION";
 
-
-    public FetchVideos(ArrayAdapter adapter) {
+    private List<MovieVideoLink> cache;
+    public FetchVideos(ArrayAdapter adapter, List<MovieVideoLink> cache) {
         this.movieAdapter = adapter;
+        this.cache        = cache;
     }
 
 
@@ -133,6 +135,10 @@ public class FetchVideos extends AsyncTask<String, Void, List<MovieInfoContainer
     protected void onPostExecute(List<MovieInfoContainer> result) {
         if (result!=null && result.size()>0) {
             movieAdapter.addAll(result);
+            cache.clear();
+            Iterator<MovieInfoContainer> it = result.iterator();
+            while (it.hasNext())
+                cache.add((MovieVideoLink)it.next());
         }
     }
 }

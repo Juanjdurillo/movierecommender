@@ -1,4 +1,4 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.android.movierecomender.R;
+import com.example.android.movierecomender.activities.ShowReviews;
 import com.example.android.movierecomender.adapters.MovieDetailsAdapter;
 import com.example.android.movierecomender.container.MovieBasicInfo;
 import com.example.android.movierecomender.container.MovieInfoContainer;
 import com.example.android.movierecomender.container.MovieVideoLink;
 import com.example.android.movierecomender.fetchers.FetchVideos;
+import com.example.android.movierecomender.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -22,6 +25,7 @@ public class DetailedMovieFragment extends Fragment {
     MovieDetailsAdapter         movieAdapter = null;
     private boolean             twoPanels = true;
     private MovieInfoContainer  movie = null;
+    private ArrayList<MovieVideoLink> cache = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class DetailedMovieFragment extends Fragment {
         if (sourceOfData != null) {
             movie     = sourceOfData.getParcelable(MovieBasicInfo.class.getName());
             twoPanels = sourceOfData.getBoolean("TWO_PANELS");
+            cache     = sourceOfData.getParcelableArrayList(MovieVideoLink.class.getName());
         } else {
             return null;
         }
@@ -70,17 +75,32 @@ public class DetailedMovieFragment extends Fragment {
 
         this.movieAdapter.add(movie);
         this.movieAdapter.add(movie);
-        String key = getResources().getString(R.string.movie_db_key);
-        String[] params = {new Integer(((MovieBasicInfo) movie).getId()).toString(), key};
-        new FetchVideos(this.movieAdapter).execute(params);
+        if (this.cache==null || this.cache.size()==0) {
+            if (this.cache == null)
+                this.cache = new ArrayList<>();
+            fetchMovies();
+        }
+
         return rootView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelable(MovieBasicInfo.class.getName(),(MovieBasicInfo) movie);
-        savedInstanceState.putBoolean("TWO_PANELS",twoPanels);
+        savedInstanceState.putParcelable(MovieBasicInfo.class.getName(), (MovieBasicInfo) movie);;
+        savedInstanceState.putBoolean("TWO_PANELS", twoPanels);
+        if (cache.size() > 0) {
+            savedInstanceState.putParcelableArrayList(MovieVideoLink.class.getName(), this.cache);
+        }
+
+    }
+
+    public void fetchMovies() {
+        if (Utility.isNetworkAvailable(getActivity())) {
+            String key = getResources().getString(R.string.movie_db_key);
+            String[] params = {new Integer(((MovieBasicInfo) movie).getId()).toString(), key};
+            new FetchVideos(this.movieAdapter, this.cache).execute(params);
+        }
     }
 
     public interface Callback {

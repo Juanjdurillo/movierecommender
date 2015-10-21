@@ -1,7 +1,12 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+
+import com.example.android.movierecomender.R;
 
 /**
  * Juanjo Durillo <juanjod@gmail.com>
@@ -17,5 +22,12 @@ public class Utility {
                 context.getString(R.string.default_sorting_method));
         return aux;
     }
+
+    static public boolean isNetworkAvailable(Activity activity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo!=null && networkInfo.isConnected();
+    }
+
 
 }

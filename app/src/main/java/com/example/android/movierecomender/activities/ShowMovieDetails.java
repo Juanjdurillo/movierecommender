@@ -1,4 +1,4 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.activities;
 
 
 import android.os.Bundle;
@@ -7,7 +7,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.movierecomender.R;
 import com.example.android.movierecomender.container.MovieBasicInfo;
+import com.example.android.movierecomender.fragments.DetailedMovieFragment;
 
 
 public class ShowMovieDetails extends ActionBarActivity {

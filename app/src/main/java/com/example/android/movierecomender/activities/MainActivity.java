@@ -1,4 +1,4 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.movierecomender.R;
+import com.example.android.movierecomender.settings.SortPreferencesSetting;
 import com.example.android.movierecomender.container.MovieBasicInfo;
+import com.example.android.movierecomender.fragments.DetailedMovieFragment;
+import com.example.android.movierecomender.fragments.PopularMoviesFragment;
+import com.example.android.movierecomender.fragments.ShowReviewsFragment;
 
 
 public class MainActivity extends ActionBarActivity implements PopularMoviesFragment.Callback,

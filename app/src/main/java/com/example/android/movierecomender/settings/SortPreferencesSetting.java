@@ -1,4 +1,4 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.settings;
 
 
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import com.example.android.movierecomender.R;
 
 
 /**

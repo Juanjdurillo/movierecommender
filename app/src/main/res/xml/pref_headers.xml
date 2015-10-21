@@ -3,15 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.example.android.movierecomender.SortPreferencesSetting$GeneralPreferenceFragment"
+        android:fragment="com.example.android.movierecomender.settings.SortPreferencesSetting$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.example.android.movierecomender.SortPreferencesSetting$NotificationPreferenceFragment"
+        android:fragment="com.example.android.movierecomender.settings.SortPreferencesSetting$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.example.android.movierecomender.SortPreferencesSetting$DataSyncPreferenceFragment"
+        android:fragment="com.example.android.movierecomender.settings.SortPreferencesSetting$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>

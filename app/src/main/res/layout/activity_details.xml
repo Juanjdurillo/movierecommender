@@ -2,6 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/movie_detail_container"
     android:name="com.example.android.movierecomender.ShowMovieDetails"
-    tools:context="com.example.android.movierecomender.ShowMovieDetails"
+    tools:context="com.example.android.movierecomender.activities.ShowMovieDetails"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

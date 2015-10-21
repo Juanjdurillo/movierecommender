@@ -38,9 +38,10 @@ public class FetchReviews extends AsyncTask<String, Void, List<ReviewContainer>>
     // Tags for debugging
     public static final String CONNECTION_TAG                = "CONNECTION";
 
-
-    public FetchReviews(ArrayAdapter adapter) {
-        this.movieAdapter = adapter;
+    private List<ReviewContainer> cache;
+    public FetchReviews(ArrayAdapter adapter, List<ReviewContainer> cache) {
+        this.movieAdapter   = adapter;
+        this.cache          = cache;
     }
 
 
@@ -135,6 +136,8 @@ public class FetchReviews extends AsyncTask<String, Void, List<ReviewContainer>>
         if (result!=null && result.size()>0) {
             Log.e("ADAPTER","Adding movies");
             movieAdapter.addAll(result);
+            cache.clear();
+            cache.addAll(result);
         }
     }
 }

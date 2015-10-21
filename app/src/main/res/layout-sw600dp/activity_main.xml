@@ -5,12 +5,12 @@
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
-    tools:context="com.example.android.movierecomender.MainActivity">
+    tools:context="com.example.android.movierecomender.activities.MainActivity">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fragment"
-    android:name="com.example.android.movierecomender.PopularMoviesFragment"
+    android:name="com.example.android.movierecomender.fragments.PopularMoviesFragment"
     tools:layout="@layout/fragment_main" android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="2"/>

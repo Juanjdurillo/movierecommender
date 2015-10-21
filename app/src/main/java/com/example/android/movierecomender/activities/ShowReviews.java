@@ -1,11 +1,13 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.activities;
 
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
+import com.example.android.movierecomender.R;
 import com.example.android.movierecomender.container.MovieBasicInfo;
+import com.example.android.movierecomender.fragments.ShowReviewsFragment;
 
 public class ShowReviews extends ActionBarActivity{
     @Override

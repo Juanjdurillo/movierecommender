@@ -1,10 +1,7 @@
-package com.example.android.movierecomender;
+package com.example.android.movierecomender.fragments;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -19,10 +16,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
+import com.example.android.movierecomender.R;
 import com.example.android.movierecomender.adapters.MoviePosterAdapter;
 import com.example.android.movierecomender.container.MovieBasicInfo;
 import com.example.android.movierecomender.data.MovieContract;
 import com.example.android.movierecomender.fetchers.FetchPopularMovies;
+import com.example.android.movierecomender.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -108,7 +107,7 @@ public class PopularMoviesFragment extends Fragment
         if (savedInstanceState != null && !savedInstanceState.isEmpty())
             this.cache = savedInstanceState.getParcelableArrayList(MovieBasicInfo.class.getName());
 
-        if (this.cache.size() > 0)
+        if (this.cache!= null && this.cache.size() > 0)
             this.movieAdapter.addAll(this.cache);
         else
             this.fetchMovies();
@@ -126,7 +125,7 @@ public class PopularMoviesFragment extends Fragment
      * the database. The <code>FetchPopularMovies</code> extends <code>AsyncTask</code>
      */
     private void fetchMovies() {
-        if (!this.isNetworkAvailable()) {
+        if (!Utility.isNetworkAvailable(getActivity())) {
             Log.e("Network is not ", "Network is not available");
             return;
         }
@@ -170,13 +169,6 @@ public class PopularMoviesFragment extends Fragment
         if (!newSortingKey.equals(sortingKey))
             this.fetchMovies();
     }
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo!=null && networkInfo.isConnected();
-    }
-
 
     /**
       * A callback interface that all activities containing this fragment must
